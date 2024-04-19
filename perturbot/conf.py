@@ -4,11 +4,11 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "perturbot"
+project = "Perturb-OT"
 copyright = "2024, Jayoung Ryu, Romain Lopez, Charlotte Bunne"
 author = "Jayoung Ryu, Romain Lopez, Charlotte Bunne"
 
@@ -30,4 +30,4 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "alabaster"
-html_static_path = ["_static"]
+#html_static_path = ["../_static"]

@@ -1,0 +1,42 @@
+name: "Sphinx: Render docs"
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+
+    - name: Install Sphinx & Dependencies
+      run: |
+        pip install sphinx sphinx_rtd_theme 
+        cd scvi-tools/; pip install .
+        cd ../ott/; pip install .
+        cd ../perturbot; pip install .
+    - name: Build Documentation
+      working-directory: perturbot
+      run: sphinx-build . ../docs
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        name: github-pages
+        path: docs/_build/
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write
+      pages: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
