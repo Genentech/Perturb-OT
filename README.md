@@ -1,4 +1,4 @@
-# perturbot
+# Perturb-OT
 Cross-modality matching and prediction of **perturb**ation response with labeled Gromov-Wasserstein **O**ptimal **T**ransport.
 
 ![Schematic](imgs/schematic.png)
