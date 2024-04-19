@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath('.'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Perturb-OT"
-copyright = "2024, Jayoung Ryu, Romain Lopez, Charlotte Bunne"
+copyright = "Genentech"
 author = "Jayoung Ryu, Romain Lopez, Charlotte Bunne"
 
 # -- General configuration ---------------------------------------------------
