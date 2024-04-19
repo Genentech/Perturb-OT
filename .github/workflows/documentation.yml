@@ -20,11 +20,11 @@ jobs:
         cd ../perturbot; pip install .
     - name: Build Documentation
       working-directory: perturbot
-      run: sphinx-build . ../docs
+      run: sphinx-build . _build
     - uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages
-        path: docs/_build/
+        path: perturbot/_build
 
   deploy:
     needs: build
