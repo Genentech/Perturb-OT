@@ -12,7 +12,7 @@ description = "OT for aligning multimodal perturbation"
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-  "scanpy>=1.6"
+  "scanpy>=1.6",
   "POT>=0.9",
 ]
 classifiers = [
@@ -24,3 +24,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://code.roche.com/ryuj6/perturbot"
 Issues = "https://code.roche.com/ryuj6/perturbot/-/issues"
+
+[tool.setuptools]
+packages=["perturbot"]
