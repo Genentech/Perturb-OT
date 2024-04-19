@@ -71,7 +71,7 @@ model, pred_log = train_mlp((X_dict, Y_dict), T_dict)
 # Learn feature-feature matching
 T_feature, fm_log = get_coupling_fot((X_dict, Y_dict), T_dict)
 ```
-See [documentation](https://perturbot-ryuj6-c30e3f9a4e1c18c118ba07b4ae09f88b307e47aac8d5c0f.pages.roche.com) for more details.
+See [documentation](https://fluffy-bassoon-5mg2n8y.pages.github.io/) for more details.
 ## Support
 Please submit issues or reach out to jayoung_ryu@g.harvard.edu.
 
