@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Welcome to perturbot’s documentation! &#8212; perturbot  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-perturbot-s-documentation">
+<h1>Welcome to perturbot’s documentation!<a class="headerlink" href="#welcome-to-perturbot-s-documentation" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<dl class="py function" id="module-perturbot.match">
+<dt class="sig sig-object py" id="perturbot.match.cot_numpy">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">cot_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_lin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#perturbot.match.cot_numpy" title="Link to this definition">¶</a></dt>
+<dd><p>Returns COOT between two datasets X1,X2 (see [1]), Sinkhorn reimplemented with OTT</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[COOT = \min_{Ts,Tv} \sum_{i,j,k,l} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}*Tv_{k,l}\]</div>
+<p>Where :
+- X1 : The source dataset
+- X2 : The target dataset
+- w1,w2  : weights (histograms) on the samples (rows) of resp. X1 and X2
+- v1,v2  : weights (histograms) on the features (columns) of resp. X1 and X2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>, </em><em>d</em><em>)</em>) – Source dataset</p></li>
+<li><p><strong>X2</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n'</em><em>, </em><em>d'</em><em>)</em>) – Target dataset</p></li>
+<li><p><strong>w1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – Weight (histogram) on the samples of X1. If None uniform distribution is considered.</p></li>
+<li><p><strong>w2</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n'</em><em>,</em><em>)</em>) – Weight (histogram) on the samples of X2. If None uniform distribution is considered.</p></li>
+<li><p><strong>v1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>d</em><em>,</em><em>)</em>) – Weight (histogram) on the features of X1. If None uniform distribution is considered.</p></li>
+<li><p><strong>v2</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>d'</em><em>,</em><em>)</em>) – Weight (histogram) on the features of X2. If None uniform distribution is considered.</p></li>
+<li><p><strong>niter</strong> (<em>integer</em>) – Number max of iterations of the BCD for solving COOT.</p></li>
+<li><p><strong>algo</strong> (<em>string</em>) – Choice of algorithm for solving OT problems on samples each iteration. Choice [‘emd’,’sinkhorn’].
+If ‘emd’ returns sparse solution
+If ‘sinkhorn’ returns regularized solution</p></li>
+<li><p><strong>algo2</strong> (<em>string</em>) – Choice of algorithm for solving OT problems on features each iteration. Choice [‘emd’,’sinkhorn’].
+If ‘emd’ returns sparse solution
+If ‘sinkhorn’ returns regularized solution</p></li>
+<li><p><strong>reg</strong> (<em>float</em>) – Regularization parameter for samples coupling matrix. Ignored if algo=’emd’</p></li>
+<li><p><strong>reg2</strong> (<em>float</em>) – Regularization parameter for features coupling matrix. Ignored if algo=’emd’</p></li>
+<li><p><strong>eps</strong> (<em>float</em>) – Threshold for the convergence</p></li>
+<li><p><strong>random_init</strong> (<em>bool</em>) – Wether to use random initialization for the coupling matrices. If false identity couplings are considered.</p></li>
+<li><p><strong>log</strong> (<em>bool</em><em>, </em><em>optional</em>) – record log if True</p></li>
+<li><p><strong>C_lin</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>, </em><em>n'</em><em>)</em>) – Prior on the sample correspondences. Added to the cost for the samples transport</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Ts</strong> (<em>numpy array, shape (n,n’)</em>) – Optimal Transport coupling between the samples</p></li>
+<li><p><strong>Tv</strong> (<em>numpy array, shape (d,d’)</em>) – Optimal Transport coupling between the features</p></li>
+<li><p><strong>cost</strong> (<em>float</em>) – Optimization value after convergence</p></li>
+<li><p><strong>log</strong> (<em>dict</em>) – convergence information and coupling marices</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Redko Ievgen, Vayer Titouan, Flamary R{‘e}mi and Courty Nicolas
+“CO-Optimal Transport”</p>
+</aside>
+</aside>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">cot</span> <span class="kn">import</span> <span class="n">cot_numpy</span>
+
+<span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span>
+<span class="n">Xs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">Xt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">cot_numpy</span><span class="p">(</span><span class="n">Xs</span><span class="p">,</span><span class="n">Xt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.cotl_numpy">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">cotl_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_init</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_lin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#perturbot.match.cotl_numpy" title="Link to this definition">¶</a></dt>
+<dd><p>Returns COOT between two datasets X, Y given labels.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[COOTL = \min_{Ts^1,..Ts^{L},Tv} \sum_{t=1}^L \sum_{i,k \in {i|l_{x_i}=t}, j,l \in {j|l_{y_j}=t}} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>, </em><em>d</em><em>)</em>) – Source dataset</p></li>
+<li><p><strong>X2</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n'</em><em>, </em><em>d'</em><em>)</em>) – Target dataset</p></li>
+<li><p><strong>y1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – </p></li>
+<li><p><strong>y2</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n'</em><em>,</em><em>)</em>) – </p></li>
+<li><p><strong>w1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – Weight (histogram) on the samples of X1. If None uniform distribution is considered.</p></li>
+<li><p><strong>w2</strong> (<em>Ditionary</em><em> of </em><em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n'</em><em>,</em><em>)</em>) – Weight (histogram) on the samples of X2. If None uniform distribution is considered.</p></li>
+<li><p><strong>v1</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>d</em><em>,</em><em>)</em>) – Weight (histogram) on the features of X1. If None uniform distribution is considered.</p></li>
+<li><p><strong>v2</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>d'</em><em>,</em><em>)</em>) – Weight (histogram) on the features of X2. If None uniform distribution is considered.</p></li>
+<li><p><strong>niter</strong> (<em>integer</em>) – Number max of iterations of the BCD for solving COOT.</p></li>
+<li><p><strong>algo</strong> (<em>string</em>) – Choice of algorithm for solving OT problems on samples each iteration. Choice [‘emd’,’sinkhorn’].
+If ‘emd’ returns sparse solution
+If ‘sinkhorn’ returns regularized solution</p></li>
+<li><p><strong>algo2</strong> (<em>string</em>) – Choice of algorithm for solving OT problems on features each iteration. Choice [‘emd’,’sinkhorn’].
+If ‘emd’ returns sparse solution
+If ‘sinkhorn’ returns regularized solution</p></li>
+<li><p><strong>reg</strong> (<em>float</em>) – Regularization parameter for samples coupling matrix. Ignored if algo=’emd’</p></li>
+<li><p><strong>reg2</strong> (<em>float</em>) – Regularization parameter for features coupling matrix. Ignored if algo=’emd’</p></li>
+<li><p><strong>eps</strong> (<em>float</em>) – Threshold for the convergence</p></li>
+<li><p><strong>random_init</strong> (<em>bool</em>) – Wether to use random initialization for the coupling matrices. If false identity couplings are considered.</p></li>
+<li><p><strong>log</strong> (<em>bool</em><em>, </em><em>optional</em>) – record log if True</p></li>
+<li><p><strong>C_lin</strong> (<em>numpy array</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>, </em><em>n'</em><em>)</em>) – Prior on the sample correspondences. Added to the cost for the samples transport</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Ts</strong> (<em>numpy array, shape (n,n’)</em>) – Optimal Transport coupling between the samples</p></li>
+<li><p><strong>Tv</strong> (<em>numpy array, shape (d,d’)</em>) – Optimal Transport coupling between the features</p></li>
+<li><p><strong>cost</strong> (<em>float</em>) – Optimization value after convergence</p></li>
+<li><p><strong>log</strong> (<em>dict</em>) – convergence information and coupling marices</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Redko Ievgen, Vayer Titouan, Flamary R{'e}mi and Courty Nicolas
+“CO-Optimal Transport”</p>
+</aside>
+</aside>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">cotl_numpy</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">cotl_numpy</span><span class="p">(</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_cot">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_cot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_cot" title="Link to this definition">¶</a></dt>
+<dd><p>Returns sample coupling between two datasets X, Y given the labels, disregarding label information.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[COOT = \min_{Ts,Tv} \sum_{i,j,k,l} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_cot</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_cot</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_cot_sinkhorn">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_cot_sinkhorn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_cot_sinkhorn" title="Link to this definition">¶</a></dt>
+<dd><p>Returns sample coupling between two datasets X, Y given the labels, disregarding label information.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[ECOOT = \min_{Ts,Tv} \sum_{i,j,k,l} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l} - \epsilon H(T_s)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_cot_sinkhorn</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_cot_sinkhorn</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_cotl">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_cotl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_cotl" title="Link to this definition">¶</a></dt>
+<dd><p>Returns sample coupling between two datasets X, Y given the labels, disregarding label information.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[COOTL = \min_{Ts^1,..Ts^{L},Tv} \sum_{t=1}^L \sum_{i,k \in {i|l_{x_i}=t}, j,l \in {j|l_{y_j}=t}} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_eot_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_eot_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_cotl_sinkhorn">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_cotl_sinkhorn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_cotl_sinkhorn" title="Link to this definition">¶</a></dt>
+<dd><p>Returns sample coupling between two datasets X, Y given the labels.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[COOTL = \min_{Ts^1,..Ts^{L},Tv} \sum_{t=1}^L \sum_{i,k \in {i|l_{x_i}=t}, j,l \in {j|l_{y_j}=t}} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l} - \epsilon_1 H(Ts) -\epsilon_2 H(Tv)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_eot_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_eot_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_egw_all_ott">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_egw_all_ott</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_egw_all_ott" title="Link to this definition">¶</a></dt>
+<dd><p>Returns GW coupling between two datasets X, Y, all-to-all manner disregarding labels.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[GW = \min_{T\in C_{p,q}} \sum_{i,j,k,l} |(x_i-x_k)^2 - (y_j-y_l)^2|^{2}*T_{i,j}T_{k,l} - \epsilon H(T)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_egw_all_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_egw_all_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_egw_labels_ott">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_egw_labels_ott</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_egw_labels_ott" title="Link to this definition">¶</a></dt>
+<dd><p>Returns GW coupling between two datasets X, Y given the labels.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}EGWL = \min_{T\in C_{p,q}^\ell} \sum_{i,k \in \{i|l_{x_i}=t\}, j,l \in \{j|l_{y_j}=t\}} |(x_i-x_k)^2 - (y_j-y_l)^2|^{2}*T_{i,j}T_{k,l} - \epsilon H(T)\\
+C_{p,q}^\ell = \{T | T \in C{p,q}, T_{ij} &gt; 0 \implies l_{x_i} = l_{y_j}\}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_egw_labels_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_egw_labels_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_egw_ott">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_egw_ott</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_egw_ott" title="Link to this definition">¶</a></dt>
+<dd><p>Returns GW coupling between two datasets X, Y per label.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}GW^l = \min_{T^l} \sum_{i,j,k,l} |(x_i-x_k)^2 - (y_j-y_l)^2|^{2}*T^l_{i,j}T^l_{k,l} - \epsilon H(T^l)\\\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_egw_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_egw_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_eot_ott">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_eot_ott</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_eot_ott" title="Link to this definition">¶</a></dt>
+<dd><p>Returns OT coupling between two datasets X, Y given the labels, disregarding label information.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}EOT = \min_{T\in C_{p,q}} \sum_{i,j} (x_i-y_j)^2 T_{i,j} - \epsilon H(T)\\\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_eot_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_eot_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_fot">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_fot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#perturbot.match.get_coupling_fot" title="Link to this definition">¶</a></dt>
+<dd><p>Returns GW coupling between features given two datasets X, Y and the sample coupling.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[FOT = \min_{Tv} \sum_{i,j,k,l} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l} - \epsilon H(T_v)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>Ts</strong> – Sample-to-sample transport.
+Per-label transport matched with source dataset, target dataset
+or a global coupling matrix where the samples are concatenated by
+the order of labels in data[0].keys().</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Tv</em> – Feature-to-feature coupling.</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_egw_labels_ott</span><span class="p">,</span> <span class="n">get_coupling_fot</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Ts</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="n">get_coupling_egw_labels_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">Tv</span><span class="p">,</span> <span class="n">feature_matching_log</span> <span class="o">=</span> <span class="n">get_coupling_fot</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="n">Ts</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_gw_labels">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_gw_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_gw_labels" title="Link to this definition">¶</a></dt>
+<dd><p>Returns GW coupling between two datasets X, Y given the labels.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}GWL = \min_{T\in C_{p,q}^\ell} \sum_{i,k \in \{i|l_{x_i}=t\}, j,l \in \{j|l_{y_j}=t}\} |(x_i-x_k)^2 - (y_j-y_l)^2|^{2}*T_{i,j}T_{k,l} \\
+C_{p,q}^\ell = \{T | T \in C{p,q}, T_{ij} &gt; 0 \implies l_{x_i} = l_{y_j}\}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_gw_labels</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_gw_labels</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="perturbot.match.get_coupling_leot_ott">
+<span class="sig-prename descclassname"><span class="pre">perturbot.match.</span></span><span class="sig-name descname"><span class="pre">get_coupling_leot_ott</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.match.get_coupling_leot_ott" title="Link to this definition">¶</a></dt>
+<dd><p>Returns OT coupling between two datasets X, Y per label.</p>
+<p>The function solves the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}EOT^l = \min_{T^l} \sum_{i,j} (x_i-y_j)^2 T^l_{i,j} - \epsilon H(T^l)\\\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>eps</strong> – Regularization parameter, relative to the max cost.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>T_dict</em> – Optimal Transport coupling between the samples per label</p></li>
+<li><p><em>log</em> – Running log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">perturbot.match</span> <span class="kn">import</span> <span class="n">get_coupling_leot_ott</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Xs_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">Xt_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+<span class="n">get_coupling_leot_ott</span><span class="p">((</span><span class="n">Xs_dict</span><span class="p">,</span> <span class="n">Xt_dict</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function" id="module-perturbot.predict">
+<dt class="sig sig-object py" id="perturbot.predict.train_mlp">
+<span class="sig-prename descclassname"><span class="pre">perturbot.predict.</span></span><span class="sig-name descname"><span class="pre">train_mlp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#perturbot.predict.train_mlp" title="Link to this definition">¶</a></dt>
+<dd><p>Trains MLP predicting Y from X given the labeled sample-matching T_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – (source dataset, target dataset) where source and target datasets
+are the dictionaries mapping label to np.ndarray with matched labels.</p></li>
+<li><p><strong>T_dict</strong> – Optimal Transport coupling between the samples per label</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>model</em> – Trained predictor</p></li>
+<li><p><em>log</em> – Training log</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">perturbot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Jayoung Ryu, Romain Lopez, Charlotte Bunne.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
