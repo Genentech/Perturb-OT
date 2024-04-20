@@ -71,7 +71,7 @@ model, pred_log = train_mlp((X_dict, Y_dict), T_dict)
 # Learn feature-feature matching
 T_feature, fm_log = get_coupling_fot((X_dict, Y_dict), T_dict)
 ```
-See [documentation](https://fluffy-bassoon-5mg2n8y.pages.github.io/) for more details.
+See [documentation](https://genentech.github.io/Perturb-OT/) for more details.
 ## Support
 Please submit issues or reach out to jayoung_ryu@g.harvard.edu.
 
