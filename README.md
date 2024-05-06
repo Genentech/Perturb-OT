@@ -71,9 +71,22 @@ model, pred_log = train_mlp((X_dict, Y_dict), T_dict)
 # Learn feature-feature matching
 T_feature, fm_log = get_coupling_fot((X_dict, Y_dict), T_dict)
 ```
-See [documentation](https://genentech.github.io/Perturb-OT/) for more details.
+See [documentation](https://genentech.github.io/Perturb-OT/) and [manuscript](https://arxiv.org/abs/2405.00838) for more details.
 ## Support
 Please submit issues or reach out to jayoung_ryu@g.harvard.edu.
 
 ## Authors and acknowledgment
 Jayoung Ryu, Romain Lopez, & Charlotte Bunne
+
+## Citation
+If you have used Perturb-OT for your work, please consider citing:
+```
+@misc{ryu2024crossmodality,
+      title={Cross-modality Matching and Prediction of Perturbation Responses with Labeled Gromov-Wasserstein Optimal Transport}, 
+      author={Jayoung Ryu and Romain Lopez and Charlotte Bunne and Aviv Regev},
+      year={2024},
+      eprint={2405.00838},
+      archivePrefix={arXiv},
+      primaryClass={q-bio.GN}
+}
+```
