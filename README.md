@@ -79,7 +79,7 @@ Please submit issues or reach out to jayoung_ryu@g.harvard.edu.
 Jayoung Ryu, Romain Lopez, & Charlotte Bunne
 
 ## Citation
-If you have used Perturb-OT for your work, please consider citing:
+If you have used Perturb-OT for your work, please cite:
 ```
 @misc{ryu2024crossmodality,
       title={Cross-modality Matching and Prediction of Perturbation Responses with Labeled Gromov-Wasserstein Optimal Transport}, 
