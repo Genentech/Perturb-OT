@@ -6,6 +6,7 @@ import ot
 from ott.solvers import linear
 from ott.geometry import geometry
 from .utils import random_gamma_init, init_matrix_np
+import jax
 
 
 def cot_numpy(
@@ -178,6 +179,7 @@ def cot_numpy(
             if verbose:
                 print("converged at iter ", i)
             break
+        jax.clear_caches()
     if log:
         return Ts, Tv, cost, log_out
     else:
@@ -315,3 +317,73 @@ def get_coupling_cot_sinkhorn(
         return -1, -1
     log["time"] = time.time() - start
     return T, log
+
+
+def get_coupling_each_cot_sinkhorn(
+    data: Tuple[Dict[Number, np.array], Dict[Number, np.array]],
+    eps: float = 5e-3,
+    eps2: Optional[float] = None,
+) -> Tuple[Union[int, Dict[Number, np.array]], Union[int, Dict]]:
+    """Returns sample coupling between two datasets X, Y given the labels, disregarding label information.
+
+    The function solves the following optimization problem:
+
+    .. math::
+
+        ECOOT = \min_{Ts,Tv} \sum_{i,j,k,l} |X1_{i,k}-X2_{j,l}|^{2}*Ts_{i,j}^l*Tv_{k,l} - \epsilon H(T_s)
+
+    Parameters
+    ----------
+    data :
+        (source dataset, target dataset) where source and target datasets
+        are the dictionaries mapping label to np.ndarray with matched labels.
+    eps:
+        Regularization parameter, relative to the max cost.
+
+    Returns
+    -------
+    T_dict :
+        Optimal Transport coupling between the samples per label
+    log :
+        Running log
+
+    Example
+    ----------
+    .. code-block:: python
+
+        import numpy as np
+        from perturbot.match import get_coupling_cot_sinkhorn
+
+        n_samples = 300
+        labels = [0,1,2,3]
+        Xs_dict = {k: np.random.rand(n_samples,1) for k in labels}
+        Xt_dict = {k: np.random.rand(n_samples,2) for k in labels}
+        get_coupling_cot_sinkhorn((Xs_dict, Xt_dict), 0.05)
+    """
+    print(f"calculating with eps {eps}")
+    X_dict = data[0]
+    Y_dict = data[1]
+    X = np.concatenate([X_dict[l] for l in X_dict.keys()])
+    Y = np.concatenate([Y_dict[l] for l in X_dict.keys()])
+    if eps2 is None:
+        eps2 = eps
+    start = time.time()
+    try:
+        T_dict = {}
+        for l in X_dict.keys():
+            T, Tv, cost, log = cot_numpy(
+                X_dict[l],
+                Y_dict[l],
+                algo="sinkhorn",
+                reg=eps,
+                algo2="sinkhorn",
+                reg2=eps2,
+                log=True,
+                niter=2000,
+            )
+            T_dict[l] = T
+        print(f"Done calculating with eps {eps}")
+    except FloatingPointError:
+        return -1, -1
+    log["time"] = time.time() - start
+    return T_dict, log

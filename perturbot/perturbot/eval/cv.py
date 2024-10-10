@@ -3,6 +3,9 @@ from typing import List, Dict, Any
 from functools import partial
 from itertools import product
 import argparse
+import os
+
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
@@ -32,7 +35,11 @@ from perturbot.match.ott_egwl import (
     get_coupling_leot_ott,
     get_coupling_egw_ott,
 )
-from perturbot.match.cot import get_coupling_cot, get_coupling_cot_sinkhorn
+from perturbot.match.cot import (
+    get_coupling_cot,
+    get_coupling_cot_sinkhorn,
+    get_coupling_each_cot_sinkhorn,
+)
 from perturbot.match.gw_labels import get_coupling_gw_labels, get_coupling_egw_labels
 from perturbot.predict.scvi_vae import train_vae_model
 
@@ -49,6 +56,7 @@ ot_method_map = {
     "ECOOTL": get_coupling_cotl_sinkhorn,
     "COOT": get_coupling_cot,
     "ECOOT": get_coupling_cot_sinkhorn,
+    "ECOOT_each": get_coupling_each_cot_sinkhorn,
     "GW_all": get_coupling_gw_all,
     # "EGW_all": get_coupling_egw_all,
     "GW": get_coupling_gw_cg,
@@ -72,7 +80,7 @@ for method in ["EGWL", "EOT_ott", "LEOT_ott", "EGW_ott", "EGW_all_ott", "EGWL_OT
         1e-5,
         1e-6,
     ]
-for method in ["ECOOTL", "ECOOT"]:
+for method in ["ECOOTL", "ECOOT", "ECOOT_each"]:
     ot_method_hyperparams[method] = [0.1, 0.05, 0.01, 0.005, 0.001]
 ot_method_all_to_all = ["GW_all", "EGW_all_ott", "EOT_all_ott"]
 

@@ -18,6 +18,7 @@ def parse_args():
     parser.add_argument("--log", type=str, default=None)
     parser.add_argument("--rerun", action="store_true")
     parser.add_argument("--all", action="store_true")
+    parser.add_argument("--load-existing", action="store_true")
     parser.add_argument("--feature", action="store_true")
     return parser.parse_args()
 
@@ -44,8 +45,13 @@ if __name__ == "__main__":
         )
     elif args.all:
         submit_all_run(
-            data_paths[args.data],
+            (
+                full_data_paths[args.data]
+                if "VAE" in args.method
+                else data_paths[args.data]
+            ),
             args.method,
+            load_existing=args.load_existing,
         )
     elif args.feature:
         submit_feature_run(

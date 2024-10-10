@@ -5,9 +5,9 @@ import argparse
 import pickle as pkl
 from functools import partial
 import numpy as np
-
+import torch
 from perturbot.eval.match import get_FOSCTTM, get_diag_fracs
-
+from perturbot.eval.utils import get_Ts_from_nn_multKs
 from perturbot.match.cot_labels import get_coupling_cotl_sinkhorn
 
 from perturbot.match.ott_egwl import (
@@ -17,13 +17,17 @@ from perturbot.match.ott_egwl import (
     get_coupling_leot_ott,
     get_coupling_egw_ott,
 )
-from perturbot.match.cot import get_coupling_cot_sinkhorn
+from perturbot.match.cot import (
+    get_coupling_cot_sinkhorn,
+    get_coupling_each_cot_sinkhorn,
+)
 from perturbot.match.gw_labels import get_coupling_egw_labels
-from perturbot.predict.scvi_vae import train_vae_model
+from perturbot.predict.scvi_vae import train_vae_model, infer_from_Xs, infer_from_Ys
 
 ot_method_map = {
     "ECOOTL": get_coupling_cotl_sinkhorn,
     "ECOOT": get_coupling_cot_sinkhorn,
+    "ECOOT_each": get_coupling_each_cot_sinkhorn,
     "EGWL": get_coupling_egw_labels,
     "EOT_ott": get_coupling_eot_ott,
     "LEOT_ott": get_coupling_leot_ott,
@@ -94,21 +98,50 @@ def main(args):
         train_Z = Zs_dict
         train_data = (train_X, train_Y)
         print(f"Calculating matching with {match_eps}")
-
-        Ts_matching, log_matching = ot_method_map[args.method](train_data, match_eps)
-        if isinstance(Ts_matching, dict):
-            total_sum = 0
-            for k, v in Ts_matching.items():
-                total_sum += v.sum()
-            Ts_matching = {
-                k: v.astype(np.double) / total_sum for k, v in Ts_matching.items()
-            }
+        if args.log_filepath is not None:
+            with open(args.log_filepath, "rb") as f:
+                d = pkl.load(f)
+            Ts_matching = d["T"]
+            log_matching = ""
         else:
-            Ts_matching = Ts_matching.astype(np.double) / Ts_matching.sum()
-        _, mean_foscttm = get_FOSCTTM(Ts_matching, train_X, train_Y, use_agg="mean")
-        dfracs, rel_dfracs = get_diag_fracs(
-            Ts_matching, train_X, train_Y, train_Z, train_Z
-        )
+            Ts_matching, log_matching = ot_method_map[args.method](
+                train_data, match_eps
+            )
+        if "VAE" in args.method:
+            dim_X = data_dict["Xs_dict"][labels[0]].shape[1]
+            dim_Y = data_dict["Xt_dict"][labels[0]].shape[1]
+            latent_Y = infer_from_Ys(train_Y, Ts_matching, dim_X)
+            latent_X = infer_from_Xs(train_X, Ts_matching, dim_Y)
+            _, mean_foscttm = get_FOSCTTM(
+                Ts_matching,
+                latent_X,
+                latent_Y,
+                use_agg="mean",
+                use_barycenter=False,
+            )
+            ks = [1, 5, 10, 50, 100]
+            k_to_Ts = get_Ts_from_nn_multKs(latent_X, latent_Y, ks)  # k -> T
+            dfracs = {}
+            rel_dfracs = {}
+            for k, Ts in k_to_Ts.items():
+                dfracs[k], rel_dfracs[k] = get_diag_fracs(
+                    Ts, train_X, train_Y, train_Z, train_Z
+                )
+
+        else:
+            if isinstance(Ts_matching, dict):
+                total_sum = 0
+                for k, v in Ts_matching.items():
+                    total_sum += v.sum()
+                Ts_matching = {
+                    k: v.astype(np.double) / total_sum for k, v in Ts_matching.items()
+                }
+            else:
+                Ts_matching = Ts_matching.astype(np.double) / Ts_matching.sum()
+            _, mean_foscttm = get_FOSCTTM(Ts_matching, train_X, train_Y, use_agg="mean")
+            dfracs, rel_dfracs = get_diag_fracs(
+                Ts_matching, train_X, train_Y, train_Z, train_Z
+            )
 
         # if not all_to_all:
         mean_mean_foscttm = mean_foscttm.mean()
@@ -127,14 +160,14 @@ def main(args):
         logs["log"] = (log_matching,)
     except Exception as e:
         with open(f"all_{args.method}.{args.eps}.tmp.pkl", "wb") as f:
-            pkl.dump(logs, f)
+            pkl.dump({"log": logs, "T": Ts_matching}, f)
         raise e
 
     with open(f"all_{args.method}.{args.eps}.pkl", "wb") as f:
         pkl.dump(logs, f)
 
 
-def submit_all_run(data_path, ot_method_label):
+def submit_all_run(data_path, ot_method_label, load_existing=False):
     epsilons = [1e-2, 1e-3, 1e-4, 1e-5]
     for eps in epsilons:
         run_label = f"all.{ot_method_label}.{eps}"

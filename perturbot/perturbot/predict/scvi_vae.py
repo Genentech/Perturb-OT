@@ -152,14 +152,14 @@ def infer_from_Y(Y, module, dX):
 def infer_from_Xs(X_dict, model, dY):
     res = {}
     for k, X in X_dict.items():
-        res[k] = infer_from_X(X, model, dY)["qz_m"].detach().numpy()
+        res[k] = infer_from_X(X, model, dY)["qz_m"].detach().cpu().numpy()
     return res
 
 
 def infer_from_Ys(Y_dict, model, dX):
     res = {}
     for k, Y in Y_dict.items():
-        res[k] = infer_from_Y(Y, model, dX)["qz_m"].detach().numpy()
+        res[k] = infer_from_Y(Y, model, dX)["qz_m"].detach().cpu().numpy()
     return res
 
 

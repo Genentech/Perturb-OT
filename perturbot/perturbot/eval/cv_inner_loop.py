@@ -4,6 +4,7 @@ from typing import Dict, Any
 import sys
 import argparse
 import pickle as pkl
+import jax
 from functools import partial
 from itertools import product
 from multiprocessing import Pool
@@ -12,7 +13,9 @@ import pandas as pd
 from perturbot.eval.utils import get_Ts_from_nn_multKs
 from sklearn.model_selection import KFold
 import torch
-
+from tqdm import tqdm
+import psutil
+import gc
 from perturbot.eval.utils import _pop_keys, _pop_key
 from perturbot.eval.match import get_FOSCTTM, get_diag_fracs
 from perturbot.eval.prediction import get_evals_preds, get_evals
@@ -36,7 +39,11 @@ from perturbot.match.ott_egwl import (
     get_coupling_leot_ott,
     get_coupling_egw_ott,
 )
-from perturbot.match.cot import get_coupling_cot, get_coupling_cot_sinkhorn
+from perturbot.match.cot import (
+    get_coupling_cot,
+    get_coupling_cot_sinkhorn,
+    get_coupling_each_cot_sinkhorn,
+)
 from perturbot.match.gw_labels import get_coupling_gw_labels, get_coupling_egw_labels
 from perturbot.predict.scvi_vae import train_vae_model
 from perturbot.predict.linear_regression import (
@@ -51,6 +58,7 @@ from perturbot.predict.scvi_vae import predict_from_model, infer_from_Xs, infer_
 
 ot_method_map = {
     "ECOOTL": get_coupling_cotl_sinkhorn,
+    "ECOOT_each": get_coupling_each_cot_sinkhorn,
     "ECOOT": get_coupling_cot_sinkhorn,
     "EGWL": get_coupling_egw_labels,
     "EOT_ott": get_coupling_eot_ott,
@@ -100,6 +108,7 @@ for method in [
     "EGW_all_ott",
     "EGWL_ott",
     "ECOOT",
+    "ECOOT_each",
     "ECOOTL",
 ]:
     ot_method_hyperparams[method] = [
@@ -175,13 +184,23 @@ def main(args):
     train_Z_prod = train_Zs * len(epsilons)
     print("Len eps", eps_prod)
     if args.log_filepath is None and "VAE" not in args.method:
+        Ts_list = []
+        logs = []
+        # for i, (_train_data, _eps) in tqdm(enumerate(zip(train_data_prod, eps_prod))):
+        #     print(f"{i}th iteration with {_eps}")
+        #     _T, _log = ot_method_map[args.method](_train_data, _eps)
+        #     Ts_list.append(_T)
+        #     logs.append(_log)
+        #     jax.clear_caches()
         try:
             with Pool(5 * len(epsilons)) as p:
+                # with Pool(5) as p:
                 Ts_list, logs = zip(
                     *p.starmap(
                         ot_method_map[args.method], zip(train_data_prod, eps_prod)
                     )
                 )
+
         except KeyboardInterrupt:
             p.terminate()
         finally:
